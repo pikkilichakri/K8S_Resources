@@ -2,39 +2,43 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx
-  labels: # these are replicaset labels
+  # labels of deployment resource
+  labels:
     app: nginx
     tier: frontend
+    purpose: deployment
 spec:
-  # modify replicas according to your case
   replicas: 3
   selector:
-    # these are used to select the pod to create replicas
     matchLabels:
-      tier: frontend
       app: nginx
-  # this is pod definition
+      tier: frontend
+      purpose: deployment
   template:
     metadata:
-      # these labels belongs to pod
       labels:
-        tier: frontend
         app: nginx
+        tier: frontend
+        purpose: deployment
     spec:
       containers:
       - name: nginx
-        image: nginx:stable-perl
+        image: joindevops/deployment:2.0
+        ports:
+        - containerPort: 80
 ---
 kind: Service
 apiVersion: v1
 metadata:
   name: nginx
 spec:
-  selector:
-    tier: frontend
+  type: LoadBalancer
+  selector: # labels are used as selectors
     app: nginx
+    tier: frontend
+    purpose: deployment
   ports:
-  - name: nginx-svc-port
-    protocol: TCP
+  - protocol: TCP
     port: 80 # service port
-    targetPort: 80 # container port
+    targetPort: 80
+    nodePort: 30007
