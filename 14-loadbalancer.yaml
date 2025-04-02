@@ -4,12 +4,30 @@ metadata:
   name: nginx-lb
 spec:
   type: LoadBalancer
-  selector:
+  selector: # labels are used as selectors
     project: expense
-    module: backend
+    component: backend
     environment: dev
+    version: "1.0.0"
+    demo: lb
   ports:
-  - name: nginx-svc-port
-    protocol: TCP
+  - protocol: TCP
     port: 80 # service port
-    targetPort: 80 # container port
+    targetPort: 80
+    nodePort: 30007
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: backend-lb
+  labels:
+    project: expense
+    component: backend
+    environment: dev
+    version: "1.0.0"
+    demo: lb
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    
