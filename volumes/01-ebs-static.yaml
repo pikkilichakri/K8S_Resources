@@ -10,7 +10,7 @@ spec:
   csi:
     driver: ebs.csi.aws.com
     fsType: ext4
-    volumeHandle: vol-0ca84d45b216faffb  # ebs volume  created from aws
+    volumeHandle: vol-08905343d7e9e2316 # ebs volume  created from aws
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
